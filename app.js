@@ -67,7 +67,7 @@ let SCRIPT_URL = SCRIPT_URL_FIJA !== 'TU_URL_ACA' ? SCRIPT_URL_FIJA : (localStor
 // (sin Firebase Cloud Messaging ni recordatorios push)
 
 const AVATARS = [
-  {bg:'#2a0505',fg:'#FF3B3B'},{bg:'#05152a',fg:'#5B8FF9'},
+  {bg:'#0f2a05',fg:'#B8F73C'},{bg:'#05152a',fg:'#5B8FF9'},
   {bg:'#2a1505',fg:'#FFB060'},{bg:'#2a0505',fg:'#FF7070'},
   {bg:'#150528',fg:'#C4A0FF'},{bg:'#052a1a',fg:'#60FFB0'},
   {bg:'#282505',fg:'#FFE060'},{bg:'#051528',fg:'#60AFFF'}
@@ -402,7 +402,7 @@ function renderEstadisticasData(data) {
     document.getElementById('mejor-jornada-list').innerHTML = jornadas.map(j => {
       const ganadores = j.ganadores.join(', ');
       return `<div style="display:flex;align-items:center;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px;margin-bottom:8px;">
-        <div style="background:rgba(255,59,59,0.1);border:1px solid rgba(255,59,59,0.2);border-radius:8px;padding:8px 12px;text-align:center;min-width:56px;flex-shrink:0;">
+        <div style="background:rgba(184,247,60,0.1);border:1px solid rgba(184,247,60,0.2);border-radius:8px;padding:8px 12px;text-align:center;min-width:56px;flex-shrink:0;">
           <div style="font-size:9px;color:var(--green);text-transform:uppercase;letter-spacing:.07em">Jornada</div>
           <div style="font-family:var(--font-d);font-size:22px;color:var(--green)">${j.jornada}</div>
         </div>
@@ -419,7 +419,7 @@ function renderEstadisticasData(data) {
 // ── ELIMINATORIAS ────────────────────────────────────────────
 const RONDAS_ELIM = {
   'DIECISEISAVOS': { label:'🏁 Dieciseisavos de Final', color:'rgba(91,143,249,0.12)', border:'rgba(91,143,249,0.3)' },
-  'OCTAVOS': { label:'⚡ Octavos de Final',    color:'rgba(255,59,59,0.15)',  border:'rgba(255,59,59,0.3)'  },
+  'OCTAVOS': { label:'⚡ Octavos de Final',    color:'rgba(184,247,60,0.15)',  border:'rgba(184,247,60,0.3)'  },
   'CUARTOS': { label:'🔥 Cuartos de Final',    color:'rgba(255,160,50,0.1)',   border:'rgba(255,160,50,0.3)'  },
   'SEMIS':   { label:'💥 Semifinales',         color:'rgba(255,85,85,0.1)',    border:'rgba(255,85,85,0.3)'   },
   'TERCER':  { label:'🥉 Tercer Puesto',       color:'rgba(205,127,50,0.1)',   border:'rgba(205,127,50,0.3)'  },
@@ -584,7 +584,7 @@ function renderPartidoEnVivoTab(p){
         <div style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;">${p.jornada||''}</div>
         <div style="display:flex;align-items:center;justify-content:center;gap:12px;">
           <span style="font-size:14px;font-weight:700;flex:1;text-align:right;">${p.local}</span>
-          <span style="font-size:28px;font-weight:900;color:var(--accent);background:rgba(255,59,59,.08);border-radius:10px;padding:4px 14px;min-width:72px;text-align:center;">${glActual}–${gvActual}</span>
+          <span style="font-size:28px;font-weight:900;color:var(--accent);background:rgba(184,247,60,.08);border-radius:10px;padding:4px 14px;min-width:72px;text-align:center;">${glActual}–${gvActual}</span>
           <span style="font-size:14px;font-weight:700;flex:1;text-align:left;">${p.visitante}</span>
         </div>
       </div>
@@ -1170,7 +1170,7 @@ function renderPron(){
       if(pl===rl && pv===rv){
         // Exacto ✅
         badge='<span class="badge b-green" style="font-size:10px">✅ Exacto +3</span>';
-        resultStyle='background:rgba(255,59,59,0.05);border-left:3px solid var(--green)';
+        resultStyle='background:rgba(184,247,60,0.05);border-left:3px solid var(--green)';
       } else {
         const ganReal = rl>rv?'L':rv>rl?'V':'E';
         const ganPred = pl>pv?'L':pv>pl?'V':'E';
@@ -1325,7 +1325,7 @@ function actualizarResumenPron(){
   if(!el) return;
   if(exactos+aciertos+errores===0){el.innerHTML='';return;}
   el.innerHTML=`
-    <div style="background:rgba(255,59,59,0.08);border:1px solid rgba(255,59,59,0.2);border-radius:10px;padding:12px;text-align:center">
+    <div style="background:rgba(184,247,60,0.08);border:1px solid rgba(184,247,60,0.2);border-radius:10px;padding:12px;text-align:center">
       <div style="font-size:10px;color:var(--green);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">Exactos</div>
       <div style="font-family:var(--font-d);font-size:26px;color:var(--green)">${exactos}</div>
     </div>
@@ -1333,7 +1333,7 @@ function actualizarResumenPron(){
       <div style="font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">1X2</div>
       <div style="font-family:var(--font-d);font-size:26px;color:var(--gold)">${aciertos}</div>
     </div>
-    <div style="background:rgba(255,59,59,0.06);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center">
+    <div style="background:rgba(184,247,60,0.06);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center">
       <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">Mis puntos</div>
       <div style="font-family:var(--font-d);font-size:26px;color:var(--white)">${puntos}</div>
     </div>`;
@@ -1536,7 +1536,7 @@ function limpiarFoto() {}
 
 // ── CONFETTI & FESTEJO ───────────────────────────────────────
 
-const CONFETTI_COLORS = ['#FF3B3B','#FFD060','#FF5555','#5B8FF9','#C4A0FF','#60FFB0','#FF9060','#FFFFFF'];
+const CONFETTI_COLORS = ['#B8F73C','#FFD060','#FF5555','#5B8FF9','#C4A0FF','#60FFB0','#FF9060','#FFFFFF'];
 let confettiAnimId = null;
 let particulas = [];
 
@@ -1613,7 +1613,7 @@ function mostrarFestejo(nombre) {
     background:linear-gradient(135deg,#1a2e05,#0f1a03);
     border:2px solid var(--green);border-radius:20px;
     padding:28px 36px;text-align:center;z-index:301;
-    box-shadow:0 0 60px rgba(255,59,59,0.3);
+    box-shadow:0 0 60px rgba(184,247,60,0.3);
     animation:festejoIn .4s cubic-bezier(.34,1.56,.64,1) forwards;
   `;
   banner.innerHTML = `

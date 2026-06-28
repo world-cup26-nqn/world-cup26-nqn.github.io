@@ -21,7 +21,7 @@
 <meta name="twitter:description" content="¡Participá en el prode del Mundial 2026! Cargá tus pronósticos y competí con amigos."/>
 <meta name="twitter:image" content="https://prode-nqn-2026.github.io/prode2026/preview.png"/>
 <meta name="description" content="Prode Neuquén 2026 — pronósticos del Mundial y ranking en tiempo real."/>
-<meta name="theme-color" content="#FF3B3B"/>
+<meta name="theme-color" content="#B8F73C"/>
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -76,7 +76,7 @@
     <span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:999px;padding:8px 12px;font-size:12px;color:var(--muted2);">⚽ 104 partidos</span>
   </div>
   <!-- CONTADOR REGRESIVO ARGENTINA -->
-  <div id="contador-wrap" style="margin:20px auto 0;max-width:360px;background:rgba(255,59,59,0.06);border:1px solid rgba(255,59,59,0.15);border-radius:var(--r);padding:14px 16px;display:none;">
+  <div id="contador-wrap" style="margin:20px auto 0;max-width:360px;background:rgba(184,247,60,0.06);border:1px solid rgba(184,247,60,0.15);border-radius:var(--r);padding:14px 16px;display:none;">
     <div id="cnt-label" style="font-size:10px;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;text-align:center">🌍 Falta para el Mundial 2026</div>
     <div style="display:flex;justify-content:center;gap:8px;" id="contador-boxes">
       <div style="text-align:center">
@@ -106,7 +106,7 @@
     <button class="btn btn-primary" id="btn-unirme" onclick="abrirModal('registro')">+ Unirme al prode</button>
     <button class="btn btn-ghost" id="btn-login" onclick="abrirLoginRapido()">🔑 Iniciar sesión</button>
     <div id="btn-logueado" style="display:none;position:relative;">
-      <button onclick="toggleMenuUsuario()" style="background:rgba(255,59,59,0.08);border:1px solid rgba(255,59,59,0.2);border-radius:999px;padding:10px 20px;font-size:14px;font-weight:500;color:var(--green);cursor:pointer;display:flex;align-items:center;gap:8px;">
+      <button onclick="toggleMenuUsuario()" style="background:rgba(184,247,60,0.08);border:1px solid rgba(184,247,60,0.2);border-radius:999px;padding:10px 20px;font-size:14px;font-weight:500;color:var(--green);cursor:pointer;display:flex;align-items:center;gap:8px;">
         👤 Mi Cuenta <span style="font-size:10px;opacity:.6">▼</span>
       </button>
       <div id="menu-usuario" style="display:none;position:fixed;top:auto;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);min-width:220px;overflow:hidden;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,0.6);">
@@ -148,7 +148,7 @@
     <div class="stat-card"><div class="stat-label">Partidos restantes</div><div class="stat-value" id="s-restantes">—</div></div>
   </div>
   <!-- POZO -->
-  <div style="background:linear-gradient(135deg,rgba(255,59,59,0.08),rgba(255,59,59,0.03));border:1px solid rgba(255,59,59,0.2);border-radius:var(--r);padding:16px;margin-bottom:16px;">
+  <div style="background:linear-gradient(135deg,rgba(184,247,60,0.08),rgba(184,247,60,0.03));border:1px solid rgba(184,247,60,0.2);border-radius:var(--r);padding:16px;margin-bottom:16px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
       <div>
         <div style="font-size:10px;color:var(--green);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px">💰 Pozo total acumulado</div>
@@ -302,7 +302,7 @@
 
     <!-- Stats -->
     <div class="modal-section" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;">
-      <div style="background:rgba(255,59,59,0.08);border:1px solid rgba(255,59,59,0.15);border-radius:10px;padding:10px;text-align:center;">
+      <div style="background:rgba(184,247,60,0.08);border:1px solid rgba(184,247,60,0.15);border-radius:10px;padding:10px;text-align:center;">
         <div style="font-family:var(--font-d);font-size:24px;color:var(--green)" id="p-exactos">0</div>
         <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Exactos</div>
       </div>
@@ -327,7 +327,7 @@
         <span id="p-pct">0%</span>
       </div>
       <div style="height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;">
-        <div id="p-barra" style="height:100%;background:linear-gradient(90deg,var(--green),#FF6B6B);border-radius:3px;transition:width .6s ease;width:0%"></div>
+        <div id="p-barra" style="height:100%;background:linear-gradient(90deg,var(--green),#D4FF6A);border-radius:3px;transition:width .6s ease;width:0%"></div>
       </div>
     </div>
 
@@ -437,7 +437,7 @@
       </div>
     </div>
     <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(255,59,59,0.06);border:1px solid rgba(255,59,59,0.15);border-radius:10px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(184,247,60,0.06);border:1px solid rgba(184,247,60,0.15);border-radius:10px;">
         <div>
           <div style="font-size:14px;font-weight:600;color:var(--white)">Resultado exacto</div>
           <div style="font-size:12px;color:var(--muted);margin-top:2px">Acertás el marcador exacto · Ej: 2-1</div>
@@ -515,7 +515,7 @@
   </div>
 
   <!-- EJEMPLO RÁPIDO -->
-  <div style="background:rgba(255,59,59,0.04);border:1px solid rgba(255,59,59,0.12);border-radius:var(--r);padding:16px;">
+  <div style="background:rgba(184,247,60,0.04);border:1px solid rgba(184,247,60,0.12);border-radius:var(--r);padding:16px;">
     <div style="font-size:12px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px">💡 Ejemplo rápido</div>
     <div style="font-size:13px;color:var(--muted);line-height:1.8;">
       El partido termina <strong style="color:var(--white)">Argentina 2 - 1 Argelia</strong><br/>
@@ -658,7 +658,7 @@
   </div>
 
   <!-- ACEPTACIÓN -->
-  <div style="background:rgba(255,59,59,0.04);border:1px solid rgba(255,59,59,0.12);border-radius:var(--r);padding:16px;text-align:center;">
+  <div style="background:rgba(184,247,60,0.04);border:1px solid rgba(184,247,60,0.12);border-radius:var(--r);padding:16px;text-align:center;">
     <div style="font-size:13px;color:var(--muted);line-height:1.7;">
       Al registrarse en el Prode Neuquén 2026, el participante declara haber leído,<br/>
       comprendido y aceptado todos los términos y condiciones aquí establecidos.<br/>
