@@ -1,6 +1,6 @@
 // Notificaciones desactivadas en el prode 16avos (sin Firebase Cloud Messaging)
 
-const CACHE = 'prode16avos-v2';
+const CACHE = 'prode16avos-v3';
 const ASSETS = [
   './',
   './index.html',
