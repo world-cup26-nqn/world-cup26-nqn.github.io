@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Prode Neuquén 2026</title>
+<!-- FAVICON / PWA -->
+<link rel="icon" href="icon-192.png" type="image/png"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<link rel="manifest" href="manifest.json"/>
+
+<!-- OPEN GRAPH — vista previa en WhatsApp, redes sociales -->
+<meta property="og:title" content="Prode Neuquén 2026 🏆"/>
+<meta property="og:description" content="¡Participá en el prode del Mundial 2026! Cargá tus pronósticos y competí con amigos."/>
+<meta property="og:image" content="https://prode-nqn-2026.github.io/prode2026/preview.png"/>
+<meta property="og:url" content="https://prode-nqn-2026.github.io/prode2026"/>
+<meta property="og:type" content="website"/>
+<meta property="og:locale" content="es_AR"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Prode Neuquén 2026 🏆"/>
+<meta name="twitter:description" content="¡Participá en el prode del Mundial 2026! Cargá tus pronósticos y competí con amigos."/>
+<meta name="twitter:image" content="https://prode-nqn-2026.github.io/prode2026/preview.png"/>
+<meta name="description" content="Prode Neuquén 2026 — pronósticos del Mundial y ranking en tiempo real."/>
+<meta name="theme-color" content="#B8F73C"/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+<script src="app.js" defer></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then(reg => {
+        // Forzar chequeo de nueva versión cada vez que abre la app
+        reg.update();
+        window.swRegistration = reg;
+      }).catch(() => {});
+      // Si el controlador cambia (nuevo SW tomó control), recargar
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+      });
+    });
+  }
+</script>
+</head>
+<body>
+
+<!-- FONDO FIJO (evita bugs de body::after en iOS Safari) -->
+<div id="bg-fondo" aria-hidden="true"></div>
+
+<!-- SPLASH SCREEN -->
+<div id="splash">
+  <img src="Trionda.png" class="splash-ball" alt=""/>
+  <div class="splash-title">PRODE<em>NQN</em></div>
+  <div class="splash-sub">Mundial 2026</div>
+</div>
+
+
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-grain" aria-hidden="true"></div>
+  <img src="Trionda.png" class="hero-ball" alt="Pelota oficial Mundial 2026"/>
+  <div class="hero-badge">🏆 Mundial 2026</div>
+  <div class="hero-title">PRODE<br/><em>NEUQUÉN</em><br/>2026</div>
+  <div class="hero-sub">11 de junio · 19 de julio de 2026</div>
+  <div class="hero-divider" aria-hidden="true"></div>
+  <div class="hero-flags" style="display:flex;justify-content:center;align-items:center;gap:16px;margin:4px 0 12px;">
+    <img src="01 usa.png" style="width:72px;height:48px;object-fit:cover;border-radius:4px;border:2px solid rgba(255,255,255,0.15);box-shadow:0 4px 16px rgba(0,0,0,0.4);" alt="USA"/>
+    <img src="02 canada.png" style="width:72px;height:48px;object-fit:cover;border-radius:4px;border:2px solid rgba(255,255,255,0.15);box-shadow:0 4px 16px rgba(0,0,0,0.4);" alt="Canadá"/>
+    <img src="03 mex.png" style="width:72px;height:48px;object-fit:cover;border-radius:4px;border:2px solid rgba(255,255,255,0.15);box-shadow:0 4px 16px rgba(0,0,0,0.4);" alt="México"/>
+  </div>
+  <div class="hero-highlights" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:0 auto 18px;max-width:520px;">
+    <span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:999px;padding:8px 12px;font-size:12px;color:var(--muted2);">🏆 Ranking en vivo</span>
+    <span style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:999px;padding:8px 12px;font-size:12px;color:var(--muted2);">⚽ 104 partidos</span>
+  </div>
+  <!-- CONTADOR REGRESIVO ARGENTINA -->
+  <div id="contador-wrap" style="margin:20px auto 0;max-width:360px;background:rgba(184,247,60,0.06);border:1px solid rgba(184,247,60,0.15);border-radius:var(--r);padding:14px 16px;display:none;">
+    <div id="cnt-label" style="font-size:10px;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;text-align:center">🌍 Falta para el Mundial 2026</div>
+    <div style="display:flex;justify-content:center;gap:8px;" id="contador-boxes">
+      <div style="text-align:center">
+        <div style="font-family:var(--font-d);font-size:36px;color:var(--white);line-height:1" id="cnt-dias">00</div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">Días</div>
+      </div>
+      <div style="font-family:var(--font-d);font-size:32px;color:var(--muted);padding-top:2px">:</div>
+      <div style="text-align:center">
+        <div style="font-family:var(--font-d);font-size:36px;color:var(--white);line-height:1" id="cnt-horas">00</div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">Horas</div>
+      </div>
+      <div style="font-family:var(--font-d);font-size:32px;color:var(--muted);padding-top:2px">:</div>
+      <div style="text-align:center">
+        <div style="font-family:var(--font-d);font-size:36px;color:var(--white);line-height:1" id="cnt-min">00</div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">Min</div>
+      </div>
+      <div style="font-family:var(--font-d);font-size:32px;color:var(--muted);padding-top:2px">:</div>
+      <div style="text-align:center">
+        <div style="font-family:var(--font-d);font-size:36px;color:var(--green);line-height:1" id="cnt-seg">00</div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">Seg</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px" id="cnt-rival"></div>
+  </div>
+
+  <div class="hero-btns" style="margin-top:20px">
+    <button class="btn btn-primary" id="btn-unirme" onclick="abrirModal('registro')">+ Unirme al prode</button>
+    <button class="btn btn-ghost" id="btn-login" onclick="abrirLoginRapido()">🔑 Iniciar sesión</button>
+    <div id="btn-logueado" style="display:none;position:relative;">
+      <button onclick="toggleMenuUsuario()" style="background:rgba(184,247,60,0.08);border:1px solid rgba(184,247,60,0.2);border-radius:999px;padding:10px 20px;font-size:14px;font-weight:500;color:var(--green);cursor:pointer;display:flex;align-items:center;gap:8px;">
+        👤 Mi Cuenta <span style="font-size:10px;opacity:.6">▼</span>
+      </button>
+      <div id="menu-usuario" style="display:none;position:fixed;top:auto;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);min-width:220px;overflow:hidden;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,0.6);">
+        <div style="padding:12px 16px;border-bottom:1px solid var(--border);font-size:12px;color:var(--muted)">
+          <span id="menu-nombre-display" style="font-size:14px;font-weight:600;color:var(--white);display:block;margin-bottom:2px"></span>
+          Mi cuenta
+        </div>
+        <button class="menu-item" onclick="abrirModal('editar-perfil');cerrarMenuUsuario()">✏️ Editar mis datos</button>
+        <button class="menu-item" onclick="abrirModal('cambiar-pin');cerrarMenuUsuario()">🔐 Cambiar PIN</button>
+        <button class="menu-item" onclick="abrirModal('cambiar-foto');cerrarMenuUsuario()">📷 Cambiar foto</button>
+        <button class="menu-item" onclick="switchTab('pronosticos');cerrarMenuUsuario()">📝 Mis pronósticos</button>
+        <button class="menu-item" style="color:var(--red);border-top:1px solid var(--border)" onclick="logoutUser();cerrarMenuUsuario()">🚪 Cerrar sesión</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- CONFIG -->
+<!-- config-banner removido --><div id="config-status" style="display:none"></div><input type="hidden" id="script-url"/>
+
+<!-- NAV -->
+<div class="nav-wrap">
+  <nav class="nav">
+    <button class="nav-tab" data-tab="ranking" data-auth="true" onclick="switchTab('ranking')">🏆 Ranking</button>
+    <button class="nav-tab" data-tab="fixture" onclick="switchTab('fixture')">📅 Fixture</button>
+    <button class="nav-tab" data-tab="envivo" onclick="switchTab('envivo')">🔴 En Vivo</button>
+    <button class="nav-tab" data-tab="pronosticos" data-auth="true" onclick="switchTab('pronosticos')">📝 Pronósticos</button>
+    <button class="nav-tab" data-tab="reglas" onclick="switchTab('reglas')">📋 Reglas</button>
+    <button class="nav-tab" data-tab="tyc" onclick="switchTab('tyc')">📄 Términos</button>
+  </nav>
+</div>
+
+<!-- RANKING -->
+<section id="view-ranking" class="view">
+  <div class="stats-top">
+    <div class="stat-card"><div class="stat-label">Participantes</div><div class="stat-value" id="s-part">—</div></div>
+    <div class="stat-card"><div class="stat-label">Partidos jugados</div><div class="stat-value" id="s-jugados">0</div></div>
+    <div class="stat-card"><div class="stat-label">Total partidos</div><div class="stat-value">104</div></div>
+    <div class="stat-card"><div class="stat-label">Partidos restantes</div><div class="stat-value" id="s-restantes">—</div></div>
+  </div>
+  <!-- POZO -->
+  <div style="background:linear-gradient(135deg,rgba(184,247,60,0.08),rgba(184,247,60,0.03));border:1px solid rgba(184,247,60,0.2);border-radius:var(--r);padding:16px;margin-bottom:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div>
+        <div style="font-size:10px;color:var(--green);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px">💰 Pozo total acumulado</div>
+        <div style="font-family:var(--font-d);font-size:36px;color:var(--white)" id="pozo-total">$0</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px">Inscripción</div>
+        <div style="font-size:18px;font-weight:600;color:var(--white)">$30.000</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+      <div style="background:rgba(255,208,96,0.1);border:1px solid rgba(255,208,96,0.2);border-radius:10px;padding:10px;text-align:center;">
+        <div style="font-size:18px;margin-bottom:4px">🥇</div>
+        <div style="font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">1er lugar · 70%</div>
+        <div style="font-family:var(--font-d);font-size:20px;color:var(--gold)" id="premio-1">$0</div>
+      </div>
+      <div style="background:rgba(192,192,192,0.08);border:1px solid rgba(192,192,192,0.15);border-radius:10px;padding:10px;text-align:center;">
+        <div style="font-size:18px;margin-bottom:4px">🥈</div>
+        <div style="font-size:10px;color:#C0C0C0;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">2do lugar · 20%</div>
+        <div style="font-family:var(--font-d);font-size:20px;color:#C0C0C0" id="premio-2">$0</div>
+      </div>
+      <div style="background:rgba(205,127,50,0.08);border:1px solid rgba(205,127,50,0.15);border-radius:10px;padding:10px;text-align:center;">
+        <div style="font-size:18px;margin-bottom:4px">🥉</div>
+        <div style="font-size:10px;color:#CD7F32;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">3er lugar · 10%</div>
+        <div style="font-family:var(--font-d);font-size:20px;color:#CD7F32" id="premio-3">$0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PODIO -->
+  <div id="podio-wrap" style="display:none;margin-bottom:16px;">
+    <div style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;text-align:center">🏆 Podio actual</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;align-items:end;">
+      <div id="podio-2" style="text-align:center"></div>
+      <div id="podio-1" style="text-align:center"></div>
+      <div id="podio-3" style="text-align:center"></div>
+    </div>
+  </div>
+
+  <div class="section-hdr">
+    <div class="section-title">TABLA</div>
+    <button class="btn btn-ghost btn-sm" onclick="cargarRanking()">↻ Actualizar</button>
+  </div>
+  <div class="ranking-wrap">
+    <div class="ranking-head">
+      <div style="text-align:center">#</div>
+      <div></div>
+      <div>Jugador</div>
+      <div style="text-align:center">✅</div>
+      <div style="text-align:center">1X2</div>
+      <div style="text-align:center">❌</div>
+      <div style="text-align:center">PTS</div>
+    </div>
+    <div id="ranking-list"><div class="empty"><span class="empty-icon">🏆</span>Cargando ranking...</div></div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--muted);text-align:center">
+    ✅ Exacto = 3 pts &nbsp;·&nbsp; 1X2 = 1 pt
+  </div>
+</section>
+
+<!-- EN VIVO -->
+<section id="view-envivo" class="view">
+  <div id="envivo-tab-content"></div>
+</section>
+
+<!-- FIXTURE -->
+<section id="view-fixture" class="view active">
+  <div class="section-hdr">
+    <div class="section-title">FIXTURE</div>
+    <button class="btn btn-ghost btn-sm" onclick="cargarFixture()">↻ Actualizar</button>
+  </div>
+  <!-- PRODE 16AVOS→FINAL: vista única agrupada por ronda (16avos → final). Sin fase de grupos. -->
+  <div id="fixture-list"><div class="empty"><span class="empty-icon">📅</span>Cargando fixture...</div></div>
+</section>
+
+<!-- PRONÓSTICOS -->
+<section id="view-pronosticos" class="view">
+  <div id="login-area">
+    <div class="login-card">
+      <span class="login-icon">⚽</span>
+      <div class="login-title">TUS PRONÓSTICOS</div>
+      <div class="login-sub">Ingresá tu nombre y PIN para<br/>cargar o ver tus predicciones</div>
+      <form name="prode-login" onsubmit="loginUser();return false;" class="login-fields" autocomplete="on">
+        <input class="input" type="text" id="login-nombre" name="username" placeholder="Tu nombre..." autocomplete="username"/>
+        <input class="input" type="password" id="login-pin" name="password" placeholder="PIN (4 números)" maxlength="4" autocomplete="current-password"/>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Entrar →</button>
+      </form>
+    </div>
+  </div>
+  <div id="pron-area" style="display:none">
+    <div class="section-hdr">
+      <div class="section-title" id="pron-title">MIS PRONÓSTICOS</div>
+      <button class="btn btn-ghost btn-sm" onclick="logoutUser()">Salir</button>
+    </div>
+
+    <!-- nombre perfil oculto para referencia -->
+    <div id="perfil-nombre" style="display:none"></div>
+    <div id="foto-img-ref" style="display:none"></div>
+
+<div id="pron-resumen" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;"></div>
+    <div id="pron-acordeon"></div>
+  </div>
+</section>
+
+
+<!-- SAVE BAR -->
+<div class="save-bar" id="save-bar">
+  <div class="save-info"><strong id="save-count">0</strong> pronósticos sin guardar</div>
+  <button class="btn btn-primary btn-sm" onclick="guardarTodos()">💾 Guardar todo</button>
+</div>
+
+
+<!-- MODAL LOGIN RÁPIDO -->
+<div class="overlay" id="modal-login">
+  <div class="modal">
+    <div class="modal-title">INICIAR SESIÓN <button class="modal-close" onclick="cerrarModal('login')">×</button></div>
+    <form name="prode-login-rapido" onsubmit="loginRapido();return false;" autocomplete="on">
+      <div class="field"><label>Nombre</label><input type="text" id="quick-nombre" name="username" placeholder="Tu nombre..." autocomplete="username"/></div>
+      <div class="field"><label>PIN de 4 números</label><input type="password" id="quick-pin" name="password" placeholder="1234" maxlength="4" autocomplete="current-password"/></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" onclick="cerrarModal('login')">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btn-login-rapido">Entrar →</button>
+      </div>
+    </form>
+    <div class="modal-note">¿Aún no te registraste? <span style="color:var(--green);cursor:pointer" onclick="cerrarModal('login');abrirModal('registro')">Unirme al prode →</span></div>
+  </div>
+</div>
+
+<!-- MODAL PERFIL -->
+<div class="overlay" id="modal-perfil">
+  <div class="modal" style="max-width:420px;max-height:85vh;overflow-y:auto;">
+    <div class="modal-title">PERFIL <button class="modal-close" onclick="cerrarModal('perfil')">×</button></div>
+
+    <!-- Header perfil -->
+    <div class="modal-section" style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+      <div id="perfil-foto-wrap" style="width:80px;height:107px;border-radius:10px;overflow:hidden;background:var(--bg3);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span id="perfil-foto-ph" style="font-size:32px">👤</span>
+        <img id="perfil-foto-img" src="" style="display:none;width:100%;height:100%;object-fit:cover;"/>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:var(--font-d);font-size:26px;letter-spacing:1px;color:var(--white)" id="perfil-modal-nombre"></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+          <span style="font-family:var(--font-d);font-size:22px;color:var(--green)" id="perfil-modal-pos"></span>
+          <span style="font-size:12px;color:var(--muted)">en el ranking</span>
+          <span id="perfil-modal-mov" style="font-size:12px;font-weight:600"></span>
+        </div>
+        <div style="font-family:var(--font-d);font-size:28px;color:var(--green);margin-top:4px" id="perfil-modal-pts"></div>
+        <div style="font-size:11px;color:var(--muted)" id="perfil-modal-desde"></div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="modal-section" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;">
+      <div style="background:rgba(184,247,60,0.08);border:1px solid rgba(184,247,60,0.15);border-radius:10px;padding:10px;text-align:center;">
+        <div style="font-family:var(--font-d);font-size:24px;color:var(--green)" id="p-exactos">0</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Exactos</div>
+      </div>
+      <div style="background:rgba(255,208,96,0.08);border:1px solid rgba(255,208,96,0.15);border-radius:10px;padding:10px;text-align:center;">
+        <div style="font-family:var(--font-d);font-size:24px;color:var(--gold)" id="p-aciertos">0</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">1X2</div>
+      </div>
+      <div style="background:rgba(255,85,85,0.06);border:1px solid rgba(255,85,85,0.12);border-radius:10px;padding:10px;text-align:center;">
+        <div style="font-family:var(--font-d);font-size:24px;color:var(--red)" id="p-errores">0</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Errores</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+        <div style="font-family:var(--font-d);font-size:24px;color:var(--white)" id="p-pendientes">0</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Pend.</div>
+      </div>
+    </div>
+
+    <!-- Barra de rendimiento -->
+    <div class="modal-section" style="margin-bottom:20px;">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px;">
+        <span>Rendimiento</span>
+        <span id="p-pct">0%</span>
+      </div>
+      <div style="height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;">
+        <div id="p-barra" style="height:100%;background:linear-gradient(90deg,var(--green),#D4FF6A);border-radius:3px;transition:width .6s ease;width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Botón editar si es el propio perfil -->
+    <div id="perfil-edit-btn" class="modal-section" style="display:none;margin-bottom:16px;">
+      <button class="btn btn-ghost btn-sm" style="width:100%;justify-content:center" onclick="cerrarModal('perfil');abrirModal('editar-perfil')">✏️ Editar mis datos</button>
+    </div>
+
+    <!-- Historial de pronósticos -->
+    <div class="modal-section" style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;">
+      📋 Historial de partidos
+    </div>
+    <div id="perfil-historial">
+      <div class="empty" style="padding:20px"><span class="empty-icon">⏳</span>Cargando...</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CAMBIAR FOTO -->
+<div class="overlay" id="modal-cambiar-foto">
+  <div class="modal">
+    <div class="modal-title">MI FOTO <button class="modal-close" onclick="cerrarModal('cambiar-foto')">×</button></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:8px 0;">
+      <div style="position:relative;">
+        <div id="modal-foto-preview" style="width:120px;height:160px;border-radius:12px;overflow:hidden;background:var(--bg3);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;">
+          <span id="modal-foto-ph" style="font-size:48px">👤</span>
+          <img id="modal-foto-img" src="" style="display:none;width:100%;height:100%;object-fit:cover;"/>
+        </div>
+        <label for="modal-foto-input" style="position:absolute;bottom:-10px;right:-10px;width:36px;height:36px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;">📷</label>
+        <input type="file" id="modal-foto-input" accept="image/*" style="display:none" onchange="previsualizarFotoModal(this)"/>
+      </div>
+      <div style="font-size:12px;color:var(--muted);text-align:center">Tamaño recomendado: 300x400px<br/>Máximo 5MB</div>
+      <div id="modal-foto-status" style="font-size:12px;color:var(--muted)"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="cerrarModal('cambiar-foto')">Cancelar</button>
+      <button class="btn btn-primary" id="btn-subir-foto-modal" onclick="subirFotoModal()" style="display:none">Guardar foto →</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR PERFIL -->
+<div class="overlay" id="modal-editar-perfil">
+  <div class="modal">
+    <div class="modal-title">MIS DATOS <button class="modal-close" onclick="cerrarModal('editar-perfil')">×</button></div>
+    <form name="prode-editar-perfil" onsubmit="guardarPerfil();return false;" autocomplete="on">
+      <div class="field"><label>WhatsApp</label><input type="text" id="edit-wa" placeholder="+54 299 ..." autocomplete="tel"/></div>
+      <div class="field"><label>Email</label><input type="email" id="edit-email" placeholder="tu@email.com" autocomplete="email"/></div>
+      <div class="field"><label>PIN actual (para confirmar)</label><input type="password" id="edit-pin-confirm" placeholder="Tu PIN actual" maxlength="4" autocomplete="current-password"/></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" onclick="cerrarModal('editar-perfil')">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btn-guardar-perfil">Guardar →</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL CAMBIAR PIN -->
+<div class="overlay" id="modal-cambiar-pin">
+  <div class="modal">
+    <div class="modal-title">CAMBIAR PIN <button class="modal-close" onclick="cerrarModal('cambiar-pin')">×</button></div>
+    <form name="prode-cambiar-pin" onsubmit="cambiarPin();return false;" autocomplete="on">
+      <div class="field"><label>PIN actual</label><input type="password" id="pin-actual" placeholder="Tu PIN actual" maxlength="4" autocomplete="current-password"/></div>
+      <div class="field"><label>PIN nuevo</label><input type="password" id="pin-nuevo" placeholder="4 números nuevos" maxlength="4" autocomplete="new-password"/></div>
+      <div class="field"><label>Confirmar PIN nuevo</label><input type="password" id="pin-nuevo-confirm" placeholder="Repetí el PIN nuevo" maxlength="4" autocomplete="new-password"/></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" onclick="cerrarModal('cambiar-pin')">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btn-cambiar-pin">Cambiar PIN →</button>
+      </div>
+      <div class="modal-note">🔒 El nuevo PIN reemplaza al anterior</div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL REGISTRO -->
+<div class="overlay" id="modal-registro">
+  <div class="modal">
+    <div class="modal-title">UNIRME <button class="modal-close" onclick="cerrarModal('registro')">×</button></div>
+    <form name="prode-registro" onsubmit="registrar();return false;" autocomplete="on">
+      <div class="field"><label>Nombre *</label><input type="text" id="reg-nombre" placeholder="Ej: Martín G." autocomplete="username"/></div>
+      <div class="field"><label>PIN de 4 números *</label><input type="password" id="reg-pin" placeholder="Ej: 1234" autocomplete="new-password"/></div>
+      <div class="field"><label>WhatsApp</label><input type="text" id="reg-wa" placeholder="+54 299 ..."/></div>
+      <div class="field"><label>Email</label><input type="email" id="reg-email" placeholder="opcional"/></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" onclick="cerrarModal('registro')">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btn-reg">Registrarme →</button>
+      </div>
+      <div class="modal-note">🔒 Tu PIN protege tus pronósticos.<br/>Tus datos se guardan en el Google Sheet del prode.</div>
+    </form>
+  </div>
+</div>
+
+<canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:300;display:none;"></canvas>
+<!-- REGLAS -->
+<section id="view-reglas" class="view">
+  <div class="section-hdr">
+    <div class="section-title">REGLAS</div>
+  </div>
+
+  <!-- PUNTUACIÓN -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px;">
+    <div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+      <span style="font-size:22px">🎯</span>
+      <div>
+        <div style="font-family:var(--font-d);font-size:18px;letter-spacing:.5px">Sistema de puntos</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">Así se calculan los puntos por partido</div>
+      </div>
+    </div>
+    <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(184,247,60,0.06);border:1px solid rgba(184,247,60,0.15);border-radius:10px;">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--white)">Resultado exacto</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">Acertás el marcador exacto · Ej: 2-1</div>
+        </div>
+        <div style="font-family:var(--font-d);font-size:32px;color:var(--green)">3 pts</div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(255,208,96,0.06);border:1px solid rgba(255,208,96,0.15);border-radius:10px;">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--white)">Resultado 1X2</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">Acertás quién gana o empate, pero no el marcador</div>
+        </div>
+        <div style="font-family:var(--font-d);font-size:32px;color:var(--gold)">1 pt</div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(255,85,85,0.05);border:1px solid rgba(255,85,85,0.12);border-radius:10px;">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--white)">Error</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">No acertás ni el resultado ni el ganador</div>
+        </div>
+        <div style="font-family:var(--font-d);font-size:32px;color:var(--red)">0 pts</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGLAS GENERALES -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px;">
+    <div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+      <span style="font-size:22px">📋</span>
+      <div>
+        <div style="font-family:var(--font-d);font-size:18px;letter-spacing:.5px">Reglas generales</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">Leelas antes de arrancar</div>
+      </div>
+    </div>
+    <div style="padding:8px 0;">
+      <div class="regla-row">
+        <span class="regla-icon">⏰</span>
+        <div>
+          <div class="regla-titulo">Cierre de pronósticos</div>
+          <div class="regla-desc">Los pronósticos se cierran automáticamente cuando el partido empieza. No se pueden modificar ni cargar después.</div>
+        </div>
+      </div>
+      <div class="regla-row">
+        <span class="regla-icon">🏆</span>
+        <div>
+          <div class="regla-titulo">Desempate en el ranking</div>
+          <div class="regla-desc">Si dos participantes tienen los mismos puntos, gana quien tenga más resultados exactos. Si siguen empatados, se comparten la posición.</div>
+        </div>
+      </div>
+      <div class="regla-row">
+        <span class="regla-icon">🔒</span>
+        <div>
+          <div class="regla-titulo">PIN personal</div>
+          <div class="regla-desc">Cada participante tiene un PIN de 4 números para proteger sus pronósticos. No lo compartas con nadie.</div>
+        </div>
+      </div>
+      <div class="regla-row" style="border-bottom:none;">
+        <span class="regla-icon">🤝</span>
+        <div>
+          <div class="regla-titulo">Fair play</div>
+          <div class="regla-desc">Está prohibido cargar pronósticos con el nombre de otro participante. Jugá con tu propio usuario.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FASE ELIMINATORIA -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px;">
+    <div style="padding:14px 16px;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:22px">⚡</span>
+      <div>
+        <div style="font-family:var(--font-d);font-size:18px;letter-spacing:.5px">Fase eliminatoria</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">Octavos, cuartos, semis y final — puntaje especial próximamente</div>
+      </div>
+      <span class="badge b-gray" style="margin-left:auto;font-size:10px">Próximamente</span>
+    </div>
+  </div>
+
+  <!-- EJEMPLO RÁPIDO -->
+  <div style="background:rgba(184,247,60,0.04);border:1px solid rgba(184,247,60,0.12);border-radius:var(--r);padding:16px;">
+    <div style="font-size:12px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px">💡 Ejemplo rápido</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.8;">
+      El partido termina <strong style="color:var(--white)">Argentina 2 - 1 Argelia</strong><br/>
+      · Pronosticaste <strong style="color:var(--green)">2-1</strong> → <strong style="color:var(--green)">3 puntos</strong> (exacto)<br/>
+      · Pronosticaste <strong style="color:var(--gold)">1-0</strong> → <strong style="color:var(--gold)">1 punto</strong> (acertaste que ganaba Argentina)<br/>
+      · Pronosticaste <strong style="color:var(--red)">0-1</strong> → <strong style="color:var(--red)">0 puntos</strong> (error)
+    </div>
+  </div>
+</section>
+
+<!-- TÉRMINOS Y CONDICIONES -->
+<section id="view-tyc" class="view">
+  <div class="section-hdr">
+    <div class="section-title">TÉRMINOS Y CONDICIONES</div>
+  </div>
+  <div style="font-size:11px;color:var(--muted);margin-bottom:16px">Prode Neuquén 2026 · Última actualización: Mayo 2026</div>
+
+  <!-- PARTICIPACIÓN -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px;">
+    <div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+      <span style="font-size:20px">👥</span>
+      <div style="font-family:var(--font-d);font-size:18px;letter-spacing:.5px">Participación</div>
+    </div>
+    <div style="padding:8px 0;">
+      <div class="regla-row">
+        <span class="regla-icon">💵</span>
+        <div>
+          <div class="regla-titulo">Inscripción</div>
+          <div class="regla-desc">La inscripción tiene un costo de $30.000 y es obligatoria para participar. El pago debe realizarse antes de cargar pronósticos.</div>
+        </div>
+      </div>
+      <div class="regla-row">
+        <span class="regla-icon">👤</span>
+        <div>
+          <div class="regla-titulo">Un usuario por persona</div>
+          <div class="regla-desc">Cada participante puede registrar un solo usuario. La creación de múltiples cuentas resulta en descalificación inmediata.</div>
+        </div>
+      </div>
+      <div class="regla-row" style="border-bottom:none">
+        <span class="regla-icon">✅</span>
+        <div>
+          <div class="regla-titulo">Aceptación de términos</div>
+          <div class="regla-desc">Al registrarse, el participante declara haber leído y aceptado estos términos y condiciones en su totalidad.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRONÓSTICOS -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px;">
+    <div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+      <span style="font-size:20px">📝</span>
+      <div style="font-family:var(--font-d);font-size:18px;letter-spacing:.5px">Pronósticos</div>
+    </div>
+    <div style="padding:8px 0;">
+      <div class="regla-row">
+        <span class="regla-icon">⏰</span>
+        <div>
+          <div class="regla-titulo">Cierre automático</div>
+          <div class="regla-desc">Los pronósticos se cierran automáticamente al inicio de cada partido. No se aceptan modificaciones ni carga de pronósticos una vez iniciado el partido.</div>
+        </div>
+      </div>
+      <div class="regla-row">
+        <span class="regla-icon">🔒</span>
+        <div>
+          <div class="regla-titulo">Responsabilidad del PIN</div>
+          <div class="regla-desc">Cada participante es responsable de mantener su PIN en secreto. Los pronósticos cargados con el PIN de un usuario se consideran válidos sin excepción.</div>
+        </div>
+      </div>
+      <div class="regla-row" style="border-bottom:none">
+        <span class="regla-icon">🚫</span>
+        <div>
+          <div class="regla-titulo">Conducta deshonesta</div>
+          <div class="regla-desc">Queda prohibido cargar pronósticos con el usuario de otra persona, manipular resultados o cualquier forma de trampa. Resulta en descalificación sin reembolso.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREMIOS -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px;">
+    <div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+      <span style="font-size:20px">🏆</span>
+      <div style="font-family:var(--font-d);font-size:18px;letter-spacing:.5px">Premios</div>
+    </div>
+    <div style="padding:8px 0;">
+      <div class="regla-row">
+        <span class="regla-icon">💰</span>
+        <div>
+          <div class="regla-titulo">Formación del pozo</div>
+          <div class="regla-desc">El pozo total se forma con la suma de todas las inscripciones ($30.000 por participante). El monto final depende del número total de inscriptos.</div>
+        </div>
+      </div>
+      <div class="regla-row">
+        <span class="regla-icon">📊</span>
+        <div>
+          <div class="regla-titulo">Distribución de premios</div>
+          <div class="regla-desc">1er lugar: 70% del pozo · 2do lugar: 20% del pozo · 3er lugar: 10% del pozo. Los porcentajes se aplican sobre el pozo total acumulado.</div>
+        </div>
+      </div>
+      <div class="regla-row">
+        <span class="regla-icon">🤝</span>
+        <div>
+          <div class="regla-titulo">Empate en el ranking</div>
+          <div class="regla-desc">En caso de empate en puntos al finalizar el torneo, se prioriza quien tenga más resultados exactos. Si persiste el empate, el premio del puesto se divide en partes iguales.</div>
+        </div>
+      </div>
+      <div class="regla-row" style="border-bottom:none">
+        <span class="regla-icon">📅</span>
+        <div>
+          <div class="regla-titulo">Pago de premios</div>
+          <div class="regla-desc">Los premios se abonan dentro de los 7 días corridos de finalizado el Mundial 2026. La forma de pago se coordinará directamente con los ganadores.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ORGANIZACIÓN -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px;">
+    <div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+      <span style="font-size:20px">⚙️</span>
+      <div style="font-family:var(--font-d);font-size:18px;letter-spacing:.5px">Organización</div>
+    </div>
+    <div style="padding:8px 0;">
+      <div class="regla-row">
+        <span class="regla-icon">👑</span>
+        <div>
+          <div class="regla-titulo">Decisiones finales</div>
+          <div class="regla-desc">Los organizadores se reservan el derecho de resolver cualquier situación no contemplada en estos términos. Su decisión es definitiva e inapelable.</div>
+        </div>
+      </div>
+      <div class="regla-row" style="border-bottom:none">
+        <span class="regla-icon">📋</span>
+        <div>
+          <div class="regla-titulo">Modificaciones</div>
+          <div class="regla-desc">Los organizadores pueden modificar estos términos con previo aviso a los participantes. Los cambios se comunicarán por los medios oficiales del prode.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACEPTACIÓN -->
+  <div style="background:rgba(184,247,60,0.04);border:1px solid rgba(184,247,60,0.12);border-radius:var(--r);padding:16px;text-align:center;">
+    <div style="font-size:13px;color:var(--muted);line-height:1.7;">
+      Al registrarse en el Prode Neuquén 2026, el participante declara haber leído,<br/>
+      comprendido y aceptado todos los términos y condiciones aquí establecidos.<br/>
+      <span style="color:var(--green);font-weight:600">⚽ ¡Buena suerte a todos!</span>
+    </div>
+  </div>
+</section>
+
+<div id="toast"></div>
+<footer>Prode Neuquén 2026 · Actualización automática · Hecho con ❤️ en Neuquén</footer>
+
+
+</body>
+</html>
