@@ -1841,9 +1841,9 @@ function actualizarHeroBtns() {
     const menuNombre = document.getElementById('menu-nombre');
     if(menuNombre) menuNombre.textContent = currentUser;
   } else {
-    // PRODE 16AVOS: registro reabierto. Ajustá esta fecha al cierre que quieras
-    // (ej. cuando arranca el primer partido de dieciseisavos). Formato: Date.UTC(año, mes-1, día, horaUTC, min, 0)
-    const cierreRegistro = new Date(Date.UTC(2026, 6, 4, 15, 0, 0)); // placeholder: 4 jul 2026 12:00 AR
+    // PRODE 16AVOS: el registro se cierra el 28/06/2026 a las 15:45 hora Argentina (UTC-3 = 18:45 UTC),
+    // 15 min antes del primer partido de dieciseisavos (16:00). Formato: Date.UTC(año, mes-1, día, horaUTC, min, 0)
+    const cierreRegistro = new Date(Date.UTC(2026, 5, 28, 18, 45, 0)); // 28 jun 2026 15:45 AR
     const registroCerrado = new Date() >= cierreRegistro;
     if(btnUnirme)   btnUnirme.style.display   = registroCerrado ? 'none' : '';
     if(btnLogin)    btnLogin.style.display     = '';
